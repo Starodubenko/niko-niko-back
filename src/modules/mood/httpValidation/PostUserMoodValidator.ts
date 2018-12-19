@@ -11,7 +11,10 @@ export class PostUserMoodValidator implements PipeTransform<any> {
     const object = plainToClass(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new BadRequestException('Mood data has incompatible format');
+      throw new BadRequestException({
+          messaage: 'Mood data has incompatible format',
+          error: errors
+      });
     }
     return value;
   }

@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpException, Post, Query } from '@nestjs/common';
+import {Body, Controller, Get, HttpException, Post, Query, UsePipes} from '@nestjs/common';
 import { IUserMoodGetQuery } from './interface/IUserMoodGetParams.interface';
 import { UserMood } from './entity/UserMood';
 import { MoodService } from './mood.service';
 import { UserMoodDto } from './dto/UserMood.dto';
 import { UserMoodFactory } from './factory/UserMoodFactory';
+import { PostUserMoodValidator } from './httpValidation/PostUserMoodValidator';
 
 @Controller('/api/mood')
 export class MoodController {
@@ -21,7 +22,7 @@ export class MoodController {
   }
 
   @Post()
-  // @UsePipes(PostUserMoodValidator)
+  @UsePipes(PostUserMoodValidator)
   async postMood(@Body() userMoodDto: UserMoodDto) {
     try {
       const userMood = await this.userMoodFactory.getUserMood(userMoodDto);
