@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpException, Post, Query } from '@nestjs/commo
 import { IUserMoodGetQuery } from './interface/IUserMoodGetParams.interface';
 import { UserMood } from './entity/UserMood';
 import { MoodService } from './mood.service';
-import { UserMoodDto } from './dto/UserMoodDto';
+import { UserMoodDto } from './dto/UserMood.dto';
 import { UserMoodFactory } from './factory/UserMoodFactory';
 
 @Controller('/api/mood')

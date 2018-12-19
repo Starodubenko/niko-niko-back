@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
-import { UserMoodDto } from '../dto/UserMoodDto';
+import { UserMoodDto } from '../dto/UserMood.dto';
 import { UserMood } from '../entity/UserMood';
 import { UserService } from '../../user';
 import { dateTimeFormat } from '../../core';
