@@ -13,6 +13,6 @@ export class UserMoodFactory {
     const user = await this.userService.getById(userMoodDto.userId);
     const moodDate = moment(userMoodDto.date, dateTimeFormat).toDate();
 
-    return new UserMood(userMoodDto.mood, user, moodDate);
+    return new UserMood(null, userMoodDto.mood, user, moodDate);
   }
 }

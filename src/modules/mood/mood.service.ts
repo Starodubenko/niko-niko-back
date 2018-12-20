@@ -1,18 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { UserMood } from './entity/UserMood';
-import { MoodRepository } from './mood.repository';
+import {Injectable} from '@nestjs/common';
+import {UserMood} from './entity/UserMood';
+import {MoodRepository} from './mood.repository';
 
 @Injectable()
 export class MoodService {
-  constructor(private readonly moodRepository: MoodRepository) {}
+    constructor(private readonly moodRepository: MoodRepository) {
+    }
 
-  async getMood(): Promise<UserMood> {
-      return await this.moodRepository.getMood();
-  }
+    async getUserMoodRange(userId: string, from?: Date, to?: Date): Promise<UserMood[]> {
+        const moodArray = await this.moodRepository.getMoodList(
+            userId,
+            {
+                from,
+                to
+            });
 
-  saveMood(userMood: UserMood): Promise<string> {
-    return new Promise<string>(resolve => {
-      resolve('' + Math.round(Math.random() * 1000));
-    });
-  }
+        return moodArray || [];
+    }
+
+    async getCurrentMoodByUserId(userId: string): Promise<UserMood> {
+        const currentDate = new Date();
+        const moodArray = await this.moodRepository.getMoodList(userId, {from: currentDate, to: currentDate});
+
+        return moodArray && moodArray[0] || null;
+    }
+
+    async saveMood(userMood: UserMood): Promise<string> {
+        return await this.moodRepository.saveMood(userMood);
+    }
 }

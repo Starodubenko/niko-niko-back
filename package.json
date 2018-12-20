@@ -24,6 +24,7 @@
     "@nestjs/core": "^5.4.0",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
+    "lodash": "^4.17.11",
     "moment": "^2.23.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
