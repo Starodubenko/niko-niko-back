@@ -1,8 +1,8 @@
 import {Body, Controller, HttpException, Post, UsePipes} from '@nestjs/common';
-import {MoodService} from './mood.service';
-import {UserMoodDto} from './dto/UserMood.dto';
-import {UserMoodFactory} from './factory/UserMoodFactory';
-import {PostUserMoodValidator} from './httpValidation/PostUserMoodValidator';
+import {MoodService} from '../service/mood.service';
+import {UserMoodDto} from '../dto/UserMood.dto';
+import {UserMoodFactory} from '../factory/UserMoodFactory';
+import {PostUserMoodValidator} from '../httpValidation/PostUserMoodValidator';
 
 @Controller('/api/mood')
 export class MoodController {
