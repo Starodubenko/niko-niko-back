@@ -4,8 +4,9 @@ import {UserMood} from '../entity/UserMood';
 import {MoodService} from '../service/mood.service';
 import {IUserMoodGetQuery} from "../interface";
 import {Observable} from "rxjs";
+import {catchError} from "rxjs/operators";
 
-@Controller('/api/mood/user')
+@Controller('/api/moodLevel/user')
 export class UserMoodController {
 
     constructor(private readonly moodService: MoodService) {
@@ -17,19 +18,21 @@ export class UserMoodController {
         const from = moment(query.from).toDate();
         const to = moment(query.to).toDate();
 
-        try {
-            return this.moodService.getUserMoodRange(userId, from, to);
-        } catch (error) {
-            throw new HttpException('', 500);
-        }
+        return this.moodService.getUserMoodRange(userId, from, to)
+            .pipe(
+                catchError(e => {
+                    throw new HttpException(e, 500);
+                })
+            )
     }
 
     @Get(':id/current')
     getCurrentUserMood(@Param('id') userId: string): Observable<UserMood> {
-        try {
-            return this.moodService.getCurrentMoodByUserId(userId);
-        } catch (error) {
-            throw new HttpException('', 500);
-        }
+        return this.moodService.getCurrentMoodByUserId(userId)
+            .pipe(
+                catchError(e => {
+                    throw new HttpException(e, 500);
+                })
+            )
     }
 }

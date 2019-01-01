@@ -12,23 +12,14 @@ export class MoodRepository {
     private moodArrayObservable: BehaviorSubject<UserMood[]>;
 
     constructor() {
-        this.moodArray = [new UserMood('1', 1, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).subtract(1, 'd').toDate()),
-        new UserMood('2', 1, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()),
-        new UserMood('3', 2, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
-        new UserMood('4', 3, new User('3', 'Colin', 'Barker', 'Team_Three'), moment(new Date()).add(1, 'd').toDate())]
+        this.moodArray = [
+            new UserMood('1', 1, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).subtract(1, 'd').toDate()),
+            new UserMood('2', 2, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()),
+            new UserMood('3', 2, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
+            new UserMood('4', 3, new User('3', 'Colin', 'Barker', 'Team_Three'), moment(new Date()).add(1, 'd').toDate())
+        ];
 
         this.moodArrayObservable = new BehaviorSubject(this.moodArray);
-        setInterval(() => {
-
-            this.moodArray.push(
-                new UserMood(
-                    '1',
-                    Math.round(Math.random() * 3),
-                    new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()
-                )
-            );
-            this.moodArrayObservable.next(this.moodArray);
-        }, 1000)
     }
 
     getMoodList(userId: string, params?: IMoodRepositoryParams): Observable<UserMood[]> {

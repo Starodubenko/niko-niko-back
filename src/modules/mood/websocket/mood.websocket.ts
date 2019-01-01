@@ -8,20 +8,27 @@ import {
     WsResponse
 } from "@nestjs/websockets";
 import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {map, switchMap} from "rxjs/operators";
 import {MoodService} from "../service/mood.service";
 import {UserMood} from "../entity/UserMood";
-import {CURRENT_MOOD_WS_EVENT, USER_MOOD_RANDE_WS_EVENT, USERS_MOOD_RANGE_WS_EVENT} from "./constants";
+import {
+    CURRENT_OWN_MOOD_LEVEL_WS_EVENT,
+    SELECT_USER_MOOD,
+    USER_MOOD_RANDE_WS_EVENT,
+    USERS_MOOD_RANGE_WS_EVENT
+} from "./constants";
 import {Query} from "@nestjs/common";
+import {UserMoodFactory} from "../factory/UserMoodFactory";
+import {ShortUserMoodDto} from "../dto/UserMood.dto";
 
 @WebSocketGateway({
-    namespace: '/ownMood'
+    namespace: '/mood'
 })
 export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
     @WebSocketServer() server;
 
-    constructor(private readonly moodService: MoodService) {}
-
+    constructor(private readonly moodService: MoodService,
+                private readonly userMoodFactory: UserMoodFactory) {}
 
     afterInit(server): any {
         // debugger;
@@ -35,13 +42,12 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         // debugger;
     }
 
-    @SubscribeMessage(CURRENT_MOOD_WS_EVENT)
-    currentMood(client, data, @Query() query): Observable<WsResponse<UserMood>> {
-        debugger;
+    @SubscribeMessage(CURRENT_OWN_MOOD_LEVEL_WS_EVENT)
+    currentOwnMoodLevel(client, data, @Query() query): Observable<WsResponse<string>> {
         return this.moodService.getCurrentMoodByUserId(client.handshake.query.userId)
             .pipe(
                 map(userMood => {
-                    return { event: CURRENT_MOOD_WS_EVENT, data: userMood }
+                    return { event: CURRENT_OWN_MOOD_LEVEL_WS_EVENT, data: userMood.mood.toString()}
                 })
             );
     }
@@ -51,8 +57,7 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         return this.moodService.getUserMoodRange(client.handshake.query.userId, data.from, data.to)
             .pipe(
                 map((userMoodArray) => {
-                    debugger;
-                    return { event: CURRENT_MOOD_WS_EVENT, data: userMoodArray }
+                    return { event: CURRENT_OWN_MOOD_LEVEL_WS_EVENT, data: userMoodArray }
                 })
             );
     }
@@ -62,8 +67,22 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         return this.moodService.getUsersMoodRange(data.userIds, data.from, data.to)
             .pipe(
                 map(userMoodMatrix => {
-                    return { event: CURRENT_MOOD_WS_EVENT, data: userMoodMatrix }
+                    return { event: CURRENT_OWN_MOOD_LEVEL_WS_EVENT, data: userMoodMatrix }
                 })
+            );
+    }
+
+    @SubscribeMessage(SELECT_USER_MOOD)
+    setCurrentMood(client, data: ShortUserMoodDto): Observable<WsResponse<string>> {
+
+        return this.userMoodFactory.getUserMoodByShortDto(data)
+            .pipe(
+                switchMap(userMood => this.moodService.saveMood(userMood)
+                    .pipe(
+                        map(userMoodId => {
+                            return { event: SELECT_USER_MOOD, data: userMoodId }
+                        })
+                    ))
             );
     }
 }

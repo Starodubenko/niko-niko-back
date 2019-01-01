@@ -1,19 +1,25 @@
 import { IsDateString, IsString } from 'class-validator';
 
-export class UserMoodDto {
+export class ShortUserMoodDto {
+    @IsString()
+    readonly moodLevel: number;
 
-  @IsString()
-  readonly mood: number;
+    @IsString()
+    readonly userId: string;
 
-  @IsString()
-  readonly userId: string;
+    constructor(mood: number, userId: string) {
+        this.moodLevel = mood;
+        this.userId = userId;
+    }
+}
+
+export class UserMoodDto extends ShortUserMoodDto {
 
   @IsDateString()
   readonly date: string;
 
-  constructor(mood: number, user: string, date: string) {
-    this.mood = mood;
-    this.userId = user;
+  constructor(moodLevel: number, userId: string, date: string) {
+    super(moodLevel, userId);
     this.date = date;
   }
 }
