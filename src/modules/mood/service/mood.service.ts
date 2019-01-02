@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {UserMood} from '../entity/UserMood';
 import {MoodRepository} from '../repository/mood.repository';
 import {Observable, Subject} from "rxjs";
-import {combineAll, mergeAll} from "rxjs/operators";
+import {combineAll, map} from "rxjs/operators";
 
 @Injectable()
 export class MoodService {
@@ -28,11 +28,13 @@ export class MoodService {
         return result.pipe(combineAll());
     }
 
-    getCurrentMoodByUserId(userId: string): Observable<UserMood> {
+    getCurrentMoodByUserId(userId: string): Observable<UserMood | null> {
         const currentDate = new Date();
         const moodArray = this.moodRepository.getMoodList(userId, {from: currentDate, to: currentDate});
 
-        return moodArray.pipe(mergeAll());
+        return moodArray.pipe(
+            map(arr => arr[0] || null)
+        );
     }
 
     saveMood(userMood: UserMood): Observable<string> {

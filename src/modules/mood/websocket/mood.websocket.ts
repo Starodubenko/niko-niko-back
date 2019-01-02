@@ -43,11 +43,14 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
 
     @SubscribeMessage(CURRENT_OWN_MOOD_LEVEL_WS_EVENT)
-    currentOwnMoodLevel(client, data, @Query() query): Observable<WsResponse<string>> {
+    currentOwnMoodLevel(client, data, @Query() query): Observable<WsResponse<string | null>> {
         return this.moodService.getCurrentMoodByUserId(client.handshake.query.userId)
             .pipe(
                 map(userMood => {
-                    return { event: CURRENT_OWN_MOOD_LEVEL_WS_EVENT, data: userMood.mood.toString()}
+                    return {
+                        event: CURRENT_OWN_MOOD_LEVEL_WS_EVENT,
+                        data: userMood && userMood.mood.toString() || null
+                    }
                 })
             );
     }
@@ -74,7 +77,6 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     @SubscribeMessage(SELECT_USER_MOOD)
     setCurrentMood(client, data: ShortUserMoodDto): Observable<WsResponse<string>> {
-
         return this.userMoodFactory.getUserMoodByShortDto(data)
             .pipe(
                 switchMap(userMood => this.moodService.saveMood(userMood)
