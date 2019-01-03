@@ -6,9 +6,10 @@ import {MoodRepository} from './repository/mood.repository';
 import {UserMoodFactory} from './factory/UserMoodFactory';
 import {UserMoodController} from "./constoller/userMood.controller";
 import {MoodGateway} from "./websocket/mood.websocket";
+import {AuthModule} from "../auth";
 
 @Module({
-    imports: [UserModule],
+    imports: [UserModule, AuthModule],
     controllers: [MoodController, UserMoodController],
     providers: [
         MoodService,

@@ -28,13 +28,14 @@ export class MoodService {
         return result.pipe(combineAll());
     }
 
-    getCurrentMoodByUserId(userId: string): Observable<UserMood | null> {
+    getCurrentMoodByUserId(userId: string): Observable<UserMood | any> {
         const currentDate = new Date();
         const moodArray = this.moodRepository.getMoodList(userId, {from: currentDate, to: currentDate});
 
-        return moodArray.pipe(
-            map(arr => arr[0] || null)
-        );
+        return moodArray
+            .pipe(
+                map(arr => arr[0] || null)
+            );
     }
 
     saveMood(userMood: UserMood): Observable<string> {

@@ -17,13 +17,15 @@ import {
     USER_MOOD_RANDE_WS_EVENT,
     USERS_MOOD_RANGE_WS_EVENT
 } from "./constants";
-import {Query} from "@nestjs/common";
+import {Query, UseGuards} from "@nestjs/common";
 import {UserMoodFactory} from "../factory/UserMoodFactory";
 import {ShortUserMoodDto} from "../dto/UserMood.dto";
+import {AuthGuard} from "../../auth";
 
 @WebSocketGateway({
     namespace: '/mood'
 })
+@UseGuards(AuthGuard)
 export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
     @WebSocketServer() server;
 

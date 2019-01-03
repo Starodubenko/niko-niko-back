@@ -13,4 +13,16 @@ export class UserService {
     getById(id: string): Observable<User> {
         return of(this.userArray.filter(user => user.id === id)[0] || null);
     }
+
+    findByCredentials(username: string, password: string): Observable<User> {
+        if(username === '1' && password == '1'){
+            return of(this.userArray[1]);
+        }
+
+        if(username === '2' && password == '2'){
+            return of(this.userArray[2]);
+        }
+
+        return of(null);
+    }
 }
