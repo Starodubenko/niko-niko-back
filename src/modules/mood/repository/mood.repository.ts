@@ -15,7 +15,7 @@ export class MoodRepository {
         this.moodArray = [
             new UserMood('1', 1, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).subtract(1, 'd').toDate()),
             new UserMood('2', 2, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()),
-            new UserMood('3', 2, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
+            new UserMood('3', 3, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
             new UserMood('4', 3, new User('3', 'Colin', 'Barker', 'Team_Three'), moment(new Date()).add(1, 'd').toDate())
         ];
 

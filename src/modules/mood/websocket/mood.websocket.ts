@@ -45,7 +45,7 @@ export class MoodGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
 
     @SubscribeMessage(CURRENT_OWN_MOOD_LEVEL_WS_EVENT)
-    currentOwnMoodLevel(client, data, @Query() query): Observable<WsResponse<string | null>> {
+    currentOwnMoodLevel(client): Observable<WsResponse<string | null>> {
         return this.moodService.getCurrentMoodByUserId(client.handshake.query.userId)
             .pipe(
                 map(userMood => {
