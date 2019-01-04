@@ -9,8 +9,8 @@ export class AuthService {
 
     constructor(private readonly userService: UserService){}
 
-    getToken(login: string, password: string){
-        return this.userService.findByCredentials(login, password)
+    getToken(username: string, password: string){
+        return this.userService.findByCredentials(username, password)
             .pipe(
                 map(user => sign({
                     data: user
@@ -28,5 +28,9 @@ export class AuthService {
 
         const token = authorizationHeader.split(' ')[1];
         return !!verify(token, SECRET);
+    }
+
+    checkUrlPathAccessibility(token: string, path: string): boolean {
+        return true;
     }
 }
