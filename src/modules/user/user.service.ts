@@ -5,9 +5,18 @@ import {Observable, of} from "rxjs";
 @Injectable()
 export class UserService {
     private userArray = [
-        new User('1', 'John', 'Doe', 'Team_One'),
-        new User('2', 'Michael', 'Smith', 'Team_Two'),
-        new User('3', 'Colin', 'Barker', 'Team_Three'),
+        new User('1', 'John', 'Doe', {
+            id: '1',
+            title: 'Team_One'
+        }),
+        new User('2', 'Michael', 'Smith', {
+            id: '2',
+            title: 'Team_Twoo'
+        }),
+        new User('3', 'Colin', 'Barker', {
+            id: '3',
+            title: 'Team_Three'
+        }),
     ];
 
     getById(id: string): Observable<User> {
@@ -15,11 +24,11 @@ export class UserService {
     }
 
     findByCredentials(username: string, password: string): Observable<User> {
-        if(username === '1' && password == '1'){
+        if (username === '1' && password == '1') {
             return of(this.userArray[0]);
         }
 
-        if(username === '2' && password == '2'){
+        if (username === '2' && password == '2') {
             return of(this.userArray[1]);
         }
 

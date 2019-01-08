@@ -13,10 +13,16 @@ export class MoodRepository {
 
     constructor() {
         this.moodArray = [
-            new UserMood('1', 1, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).subtract(1, 'd').toDate()),
-            new UserMood('2', 2, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()),
-            new UserMood('3', 3, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
-            new UserMood('4', 3, new User('3', 'Colin', 'Barker', 'Team_Three'), moment(new Date()).add(1, 'd').toDate())
+            new UserMood('1', 1, new User('1', 'John', 'Doe', {
+                id: '1',
+                title: 'Team_One'
+            }), moment(new Date()).subtract(1, 'd').toDate()),
+            // new UserMood('2',  2, new User('1', 'John', 'Doe', 'Team_One'), moment(new Date()).toDate()),
+            // new UserMood('3', 3, new User('2', 'Michael', 'Smith', 'Team_Two'), moment(new Date()).toDate()),
+            new UserMood('4', 3, new User('3', 'Colin', 'Barker', {
+                id: '3',
+                title: 'Team_Three'
+            }), moment(new Date()).add(1, 'd').toDate())
         ];
 
         this.moodArrayObservable = new BehaviorSubject(this.moodArray);
